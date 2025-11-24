@@ -1,9 +1,11 @@
 import java.io.Console;
+import java.util.Random;
 import java.util.Scanner;
 
 
 public class PasswordAnalyzer {
 
+    public static Scanner scanner = new Scanner(System.in);
     public static String password = "";
 
     public static boolean hasLowerCase = false;
@@ -23,7 +25,7 @@ public class PasswordAnalyzer {
             clearScrean();
             drawHeader();
             drawMenu();
-            performAction(getChoice());
+            appRunning = performAction(getChoice());
         }
     }
 
@@ -33,19 +35,39 @@ public class PasswordAnalyzer {
         System.out.println("=====================================================");
     }
 
+    static void drawHeaderForCheckPassword() {
+        System.out.println("=====================================================");
+        System.out.println("           SMART PASSWORD STRENGTH ANALYZER          ");
+        System.out.println("               -Check Password Strength-             ");
+        System.out.println("=====================================================");
+    }
+
+    static void drawHeaderForGeneratePassword(){
+        System.out.println("=====================================================");
+        System.out.println("           SMART PASSWORD STRENGTH ANALYZER          ");
+        System.out.println("              -Generate Strong Password-             ");
+        System.out.println("=====================================================");
+    }
+
+    static void drawHeaderForSecurityTips(){
+        System.out.println("=====================================================");
+        System.out.println("           SMART PASSWORD STRENGTH ANALYZER          ");
+        System.out.println("                    -Security Tips-                  ");
+        System.out.println("=====================================================");
+    }
+
     private static void clearScrean(){
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
 
     static void drawMenu(){
-        for (int i = 0; i<MENU_ITEMS.length; i++){
-            System.out.println(MENU_ITEMS[i]);
+        for (String menuItem : MENU_ITEMS) {
+            System.out.println(menuItem);
         }
     }
 
     static int getChoice(){
-        Scanner scanner = new Scanner(System.in);
 
         System.out.print("Enter your choice (1-4): ");
         int choice = Integer.parseInt(scanner.nextLine());
@@ -61,28 +83,58 @@ public class PasswordAnalyzer {
         switch (choice){
             case 1:
                 checkPasswordStrength();
-                break;
+                return askNextStep();
+
             case 2:
                 GenerateStrongPassword();
-                break;
+                return askNextStep();
+
             case 3:
                 securityTips();
-                break;
+                return askNextStep();
+
             case 4:
                 goodBye();
                 return false;
+            default:
+                return true;
         }
 
-        return true;
+    }
+
+    public static boolean askNextStep(){
+        System.out.println("_____________________________________________________");
+        System.out.println(" [1]. Home                                 [0]. Exit" );
+        System.out.println("_____________________________________________________");
+        System.out.println();
+
+        while (true) {
+            System.out.print("Enter Your Choice : ");
+            int choice = Integer.parseInt(scanner.nextLine());
+
+            if (choice == 1) {
+                return true;
+            }
+            else if (choice == 0) {
+                return false;
+            }
+            else {
+                System.out.println("Invalid Input");
+            }
+        }
     }
 
 
     static void checkPasswordStrength(){
+        hasLowerCase = false;
+        hasUpperCase = false;
+        hasNumbers = false;
+        hasSymbol = false;
+        hasSpace = false;
         clearScrean();
-        Scanner scanner = new Scanner(System.in);
         Console console = System.console();
 
-        drawHeader();
+        drawHeaderForCheckPassword();
 
         if (console == null){
             System.out.print("Enter Your Password : ");
@@ -109,7 +161,7 @@ public class PasswordAnalyzer {
 
     public static void estimatedCrackTime(){
 
-        String estimateCrackTime = "";
+        String estimateCrackTime;
         int poolSize = 0;
 
         if (hasLowerCase){
@@ -257,14 +309,66 @@ public class PasswordAnalyzer {
 
 
     static void GenerateStrongPassword(){
+        String symbols = "@#$%&*!^-";
+        Random random = new Random();
+        StringBuilder password = new StringBuilder();
+        int suggestionCount = 5;
+
+        clearScrean();
+        drawHeaderForGeneratePassword();
+
+        System.out.print("Enter Your Random Words Separate By Space : ");
+        String randomWords = scanner.nextLine();
+
+        System.out.println("Just Second.....");
+        clearScrean();
+
+        drawHeaderForGeneratePassword();
+        System.out.println("Here are 5 Supper Suggestions:");
+        System.out.println();
+        String[] randomWordsArray = randomWords.split(" ");
+
+        for (int j = 0; j<suggestionCount; j++) {
+            for (int i = 0; i < randomWordsArray.length; i++) {
+                password.append(randomWordsArray[i]);
+                if (i < randomWordsArray.length - 1)
+                    password.append(symbols.charAt(random.nextInt(symbols.length())));
+            }
+            password.append(random.nextInt(100));
+
+            int index = j+1;
+            System.out.println("["+index+"]. "+password);
+            password.setLength(0);
+
+        }
+
+        System.out.println();
+        System.out.println("Just Copy And Use It.....");
+
 
     }
 
     static void securityTips(){
+        clearScrean();
+        drawHeaderForSecurityTips();
+
+        System.out.println("[01] Length is Power: A 15-character sentence is harder to crack than \"P@ssw0rd1\"");
+        System.out.println("[02] The Golden Rule: One Site = One Password. Never recycle old passwords!");
+        System.out.println("[03] No Personal Info: Hackers guess names and birthdays first. Keep them out.");
+        System.out.println("[04] Double Defense: Enable 2FA (Two-Factor Auth) to stop hackers even if they have your key.");
+        System.out.println("[05] Use Tools: Don't trust your memory. Use a Password Manager (like Bitwarden).");
+
+        System.out.println();
+        System.out.println("Your security is in your hands. Stay vigilant! ");
+        System.out.println();
+
 
     }
 
     static void goodBye(){
+        clearScrean();
+        System.out.println("Thank you for using Smart Password Analyzer!");
+        System.out.println("Stay safe and hack-proof!");
 
     }
 
