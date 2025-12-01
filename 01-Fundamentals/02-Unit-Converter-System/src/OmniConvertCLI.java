@@ -10,15 +10,22 @@ public class OmniConvertCLI {
 
         while (appRunning){
             clearScrean();
-            drawHader();
+            drawMainHader();
             drawMainMenu();
-            appRunning = performAction(getChoice());
+            appRunning = performAction(getMainMenuChoice());
         }
     }
 
-    public static void drawHader(){
+    private static void drawMainHader(){
         System.out.println("===========================================================");
         System.out.println("                      OmniCovert CLI                       ");
+        System.out.println("===========================================================");
+
+    }
+
+    private static void drawLengthConverterHader(){
+        System.out.println("===========================================================");
+        System.out.println("                     Length Converter                      ");
         System.out.println("===========================================================");
     }
 
@@ -29,21 +36,51 @@ public class OmniConvertCLI {
 
     private static void drawMainMenu(){
         System.out.println("Select Category To Process:");
+        System.out.println();
         for(String item: MAIN_MENU){
             System.out.println(item);
 
         }
+        System.out.println();
     }
 
-    private static int getChoice(){
-        System.out.println("Enter Your Choice : ");
+    private static void drawLengthConverterMenu(){
+        System.out.println("Available Units : ");
+        System.out.println();
+        System.out.println("[1] Millimeters(mm)        [5] Inches(in)");
+        System.out.println("[2] Centimeters(cm)        [6] Feet(ft)");
+        System.out.println("[3] Meters(m)              [7] Yard(yd)");
+        System.out.println("[4] Kilometers(km)         [8] Miles(mi)");
+        System.out.println();
+        System.out.println("===========================================================");
+    }
+
+    private static int getMainMenuChoice(){
+        System.out.println("===========================================================");
+        System.out.print("Enter Your Choice(1-4) : ");
         int choice = Integer.parseInt(scanner.nextLine());
         while (choice>5 || choice<1){
-            System.out.println("Invalid Input.....");
-            System.out.println("Enter Your Choice : ");
+            System.out.println("Invalid Input.");
+            System.out.print("Enter Your Choice : ");
             choice = Integer.parseInt(scanner.nextLine());
         }
         return choice;
+    }
+
+    private static int getUnit(int step, String message){
+
+        System.out.println("Step "+step+message);
+        String inputMessage = "Enter the Unit ID(1-8) : ";
+        System.out.print(inputMessage);
+        int userChoice = Integer.parseInt(scanner.nextLine());
+
+        while (userChoice<1 || userChoice >8){
+            System.out.println("Invalid Input.");
+            System.out.print(inputMessage);
+            userChoice = Integer.parseInt(scanner.nextLine());
+        }
+        System.out.println("-----------------------------------------------------------");
+        return userChoice;
     }
 
     private static boolean performAction (int choice){
@@ -94,6 +131,11 @@ public class OmniConvertCLI {
 
 
     private static void lengthConverter(){
+        clearScrean();
+        drawLengthConverterHader();
+        drawLengthConverterMenu();
+        int ConvertFromUnit = getUnit(1,": Convert From Which Unit?");
+        int ConvertToUnit = getUnit(2,": Convert To Which Unit?");
 
     }
 
