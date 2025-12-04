@@ -84,8 +84,8 @@ public class OmniConvertCLI {
         return userChoice;
     }
 
-    private static double getAmount(int step,String message){
-        System.out.println("Step "+step+message);
+    private static double getAmount(){
+        System.out.println("Step "+ 3 + ": Enter Value To Convert");
         System.out.print("Amount : ");
         double amount = Double.parseDouble(scanner.nextLine());
 
@@ -122,15 +122,25 @@ public class OmniConvertCLI {
     }
 
     public static boolean askNextStep(){System.out.println("_____________________________________________________");
-        System.out.println(" [1]. Home                                 [0]. Exit" );
-        System.out.println("_____________________________________________________");
-        System.out.println();
+        System.out.println("What's Next?");
+        System.out.println("[1] New length Conversion");
+        System.out.println("[2] Back To Main Menu");
+        System.out.println("[0] Exit");
 
         while (true) {
             System.out.print("Enter Your Choice : ");
             int choice = Integer.parseInt(scanner.nextLine());
 
+            while (choice<0 || choice>2 ){
+                System.out.print("Invalid Input");
+                System.out.print("Enter Your Choice : ");
+                choice = Integer.parseInt(scanner.nextLine());
+            }
+
             if (choice == 1) {
+                lengthConverter();
+            }
+            else if (choice == 2){
                 return true;
             }
             else if (choice == 0) {
@@ -194,7 +204,7 @@ public class OmniConvertCLI {
         drawLengthConverterMenu();
         int convertFrom = getUnit(1, ": Convert From Which Unit?");
         int convertTo = getUnit(2, ": Convert To Which Unit?");
-        double amount = getAmount(3,": Enter Value To Convert");
+        double amount = getAmount();
 
         double lengthInMeter = lengthConvertToMeter(convertFrom,amount);
         double result = lengthConvertFromMeter(convertTo,lengthInMeter);
@@ -222,6 +232,9 @@ public class OmniConvertCLI {
     }
 
     private static void goodBye(){
+        clearScrean();
+        System.out.println("            Thank You For Using OmniConvertCLI              ");
+        System.out.println("               -Developed By AC Rathnayaka-                  ");
 
     }
 
