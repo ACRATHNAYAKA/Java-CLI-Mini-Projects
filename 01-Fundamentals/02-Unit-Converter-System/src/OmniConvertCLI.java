@@ -1,8 +1,9 @@
+import java.text.DecimalFormat;
 import java.util.Scanner;
 
 public class OmniConvertCLI {
-
-    static String [] MAIN_MENU = {"[01]. Length Converter", "[02]. Weight Converter", "[03]. Temperature Converter", "[04]. Currency Converter", "[05]. Exit"};
+    static String [] LENGTH_UNITS = {"Millimeters(mm)","Centimeters(cm)","Meters(m)","Kilometers(km)","Inches(in)","Feet(ft)","Yard(yd)"," Miles(mi)"};
+    static String [] MAIN_MENU = {"[1] Length Converter", "[2] Weight Converter", "[3] Temperature Converter", "[4] Currency Converter", "[5] Exit"};
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -47,10 +48,10 @@ public class OmniConvertCLI {
     private static void drawLengthConverterMenu(){
         System.out.println("Available Units : ");
         System.out.println();
-        System.out.println("[1] Millimeters(mm)        [5] Inches(in)");
-        System.out.println("[2] Centimeters(cm)        [6] Feet(ft)");
-        System.out.println("[3] Meters(m)              [7] Yard(yd)");
-        System.out.println("[4] Kilometers(km)         [8] Miles(mi)");
+        System.out.println("[1] "+LENGTH_UNITS[0]+"        [5] "+LENGTH_UNITS[4]);
+        System.out.println("[2] "+LENGTH_UNITS[1]+"        [6] "+LENGTH_UNITS[5]);
+        System.out.println("[3] "+LENGTH_UNITS[2]+"              [7] "+LENGTH_UNITS[6]);
+        System.out.println("[4] "+LENGTH_UNITS[3]+"         [8] "+LENGTH_UNITS[7]);
         System.out.println();
         System.out.println("===========================================================");
     }
@@ -83,6 +84,19 @@ public class OmniConvertCLI {
         return userChoice;
     }
 
+    private static double getAmount(int step,String message){
+        System.out.println("Step "+step+message);
+        System.out.print("Amount : ");
+        double amount = Double.parseDouble(scanner.nextLine());
+
+        while (amount<0){
+            System.out.println("Invalid Input.");
+            System.out.print("Amount : ");
+            amount = Double.parseDouble(scanner.nextLine());
+        }
+        return amount;
+    }
+
     private static boolean performAction (int choice){
         switch (choice){
             case 1:
@@ -107,8 +121,7 @@ public class OmniConvertCLI {
 
     }
 
-    public static boolean askNextStep(){
-        System.out.println("_____________________________________________________");
+    public static boolean askNextStep(){System.out.println("_____________________________________________________");
         System.out.println(" [1]. Home                                 [0]. Exit" );
         System.out.println("_____________________________________________________");
         System.out.println();
@@ -129,13 +142,70 @@ public class OmniConvertCLI {
         }
     }
 
+    private static double lengthConvertToMeter(int fromUnit, double amount){
+        switch (fromUnit){
+            case 1:
+                return amount/1000;
+            case 2:
+               return amount/100;
+            case 3:
+                return amount;
+            case 4:
+                return amount*1000;
+            case 5:
+                return amount*0.0254;
+            case 6:
+                return amount*0.3048;
+            case 7:
+                return amount*0.9411;
+            case 8:
+                return amount/1609.344;
+            default:
+                return 0;
+        }
+    }
+
+    private static double lengthConvertFromMeter(int targetUnit, double lengthInMeter){
+        switch (targetUnit){
+            case 1:
+                return lengthInMeter*1000;
+            case 2:
+                return lengthInMeter*100;
+            case 3:
+                return lengthInMeter;
+            case 4:
+                return lengthInMeter/1000;
+            case 5:
+                return lengthInMeter/0.0254;
+            case 6:
+                return lengthInMeter/0.3048;
+            case 7:
+                return lengthInMeter/0.9411;
+            case 8:
+                return lengthInMeter/1609.344;
+            default:
+                return 0;
+        }
+    }
 
     private static void lengthConverter(){
         clearScrean();
         drawLengthConverterHader();
         drawLengthConverterMenu();
-        int ConvertFromUnit = getUnit(1,": Convert From Which Unit?");
-        int ConvertToUnit = getUnit(2,": Convert To Which Unit?");
+        int convertFrom = getUnit(1, ": Convert From Which Unit?");
+        int convertTo = getUnit(2, ": Convert To Which Unit?");
+        double amount = getAmount(3,": Enter Value To Convert");
+
+        double lengthInMeter = lengthConvertToMeter(convertFrom,amount);
+        double result = lengthConvertFromMeter(convertTo,lengthInMeter);
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+        String formatResult = decimalFormat.format(result);
+
+        clearScrean();
+        System.out.println();
+        System.out.println("Calculating.....");
+        System.out.println("[ "+LENGTH_UNITS[convertFrom-1]+" >> "+LENGTH_UNITS[convertTo-1]+" ] ");
+        System.out.println("Result : "+formatResult+" "+LENGTH_UNITS[convertTo-1]);
 
     }
 
