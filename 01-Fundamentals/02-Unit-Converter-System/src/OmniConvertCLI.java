@@ -1,10 +1,13 @@
 import java.text.DecimalFormat;
 import java.util.Scanner;
+import java.util.zip.GZIPOutputStream;
 
 public class OmniConvertCLI {
+    static String [] WEIGHT_UNITS = {"Milligram(mg)","Gram(g)","Kilogram(kg)","Metric Ton","Ounce(oz)","Pound(lb)","Stone(st)","US Ton"};
     static String [] LENGTH_UNITS = {"Millimeters(mm)","Centimeters(cm)","Meters(m)","Kilometers(km)","Inches(in)","Feet(ft)","Yard(yd)"," Miles(mi)"};
     static String [] MAIN_MENU = {"[1] Length Converter", "[2] Weight Converter", "[3] Temperature Converter", "[4] Currency Converter", "[5] Exit"};
     static Scanner scanner = new Scanner(System.in);
+    static DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
     public static void main(String[] args) {
         boolean appRunning = true;
@@ -30,6 +33,12 @@ public class OmniConvertCLI {
         System.out.println("===========================================================");
     }
 
+    private static void drawWightConverterHader(){
+        System.out.println("===========================================================");
+        System.out.println("                     Weight Converter                      ");
+        System.out.println("===========================================================");
+    }
+
     private static void clearScrean(){
         System.out.print("\033[H\033[2J");
         System.out.flush();
@@ -52,6 +61,17 @@ public class OmniConvertCLI {
         System.out.println("[2] "+LENGTH_UNITS[1]+"        [6] "+LENGTH_UNITS[5]);
         System.out.println("[3] "+LENGTH_UNITS[2]+"              [7] "+LENGTH_UNITS[6]);
         System.out.println("[4] "+LENGTH_UNITS[3]+"         [8] "+LENGTH_UNITS[7]);
+        System.out.println();
+        System.out.println("===========================================================");
+    }
+
+    private static void drawWeightConverterMenu(){
+        System.out.println("Available Units : ");
+        System.out.println();
+        System.out.println("[1] "+WEIGHT_UNITS[0]+"           [5] "+WEIGHT_UNITS[4]);
+        System.out.println("[2] "+WEIGHT_UNITS[1]+"                 [6] "+WEIGHT_UNITS[5]);
+        System.out.println("[3] "+WEIGHT_UNITS[2]+"            [7] "+WEIGHT_UNITS[6]);
+        System.out.println("[4] "+WEIGHT_UNITS[3]+"              [8] "+WEIGHT_UNITS[7]);
         System.out.println();
         System.out.println("===========================================================");
     }
@@ -208,10 +228,11 @@ public class OmniConvertCLI {
 
         double lengthInMeter = lengthConvertToMeter(convertFrom,amount);
         double result = lengthConvertFromMeter(convertTo,lengthInMeter);
-        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+
         String formatResult = decimalFormat.format(result);
 
         clearScrean();
+        drawLengthConverterHader();
         System.out.println();
         System.out.println("Calculating.....");
         System.out.println("[ "+LENGTH_UNITS[convertFrom-1]+" >> "+LENGTH_UNITS[convertTo-1]+" ] ");
@@ -219,7 +240,72 @@ public class OmniConvertCLI {
 
     }
 
+    private static double weightToKilogram(int convertFrom, double amount){
+        switch (convertFrom){
+            case 1:
+                return amount/1000000;
+            case 2:
+                return amount/1000;
+            case 3:
+                return amount;
+            case 4:
+                return amount/0.001;
+            case 5:
+                return amount/35.274;
+            case 6:
+                return amount/2.20462;
+            case 7:
+                return amount/0.157473;
+            case 8:
+                return amount/0.00110231;
+            default:
+                return 0;
+        }
+    }
+
+    private static double weightFromKilogram(int convertTo, double weightInKilogram){
+        switch (convertTo){
+            case 1:
+                return weightInKilogram*1000000;
+            case 2:
+                return weightInKilogram*1000;
+            case 3:
+                return weightInKilogram;
+            case 4:
+                return weightInKilogram*0.001;
+            case 5:
+                return weightInKilogram*35.274;
+            case 6:
+                return weightInKilogram*2.20462;
+            case 7:
+                return weightInKilogram*0.157473;
+            case 8:
+                return weightInKilogram*0.00110231;
+            default:
+                return 0;
+        }
+    }
+
     private static void weightConverter(){
+            clearScrean();
+            drawWightConverterHader();
+            drawWeightConverterMenu();
+            int convertFrom = getUnit(1,": Convert From Which Unit?");
+            int convertTo = getUnit(2,": Convert To Which Unit?");
+            double amount = getAmount();
+
+            double weightInKilogram = weightToKilogram(convertFrom,amount);
+            double result = weightFromKilogram(convertTo,weightInKilogram);
+
+            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+            String formatResult = decimalFormat.format(result);
+
+            clearScrean();
+            drawWightConverterHader();
+            System.out.println();
+            System.out.println("Calculating.....");
+            System.out.println("[ "+WEIGHT_UNITS[convertFrom-1]+" >> "+WEIGHT_UNITS[convertTo-1]+" ] ");
+            System.out.println("Result : "+formatResult+" "+WEIGHT_UNITS[convertTo-1]);
 
     }
 
