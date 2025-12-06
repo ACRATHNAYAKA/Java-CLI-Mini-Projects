@@ -6,7 +6,7 @@ public class OmniConvertCLI {
     static String [] TEMPERATURE_UNITS = {"Celsius","Fahrenheit","Kelvin"};
     static String [] WEIGHT_UNITS = {"Milligram(mg)","Gram(g)","Kilogram(kg)","Metric Ton","Ounce(oz)","Pound(lb)","Stone(st)","US Ton"};
     static String [] LENGTH_UNITS = {"Millimeters(mm)","Centimeters(cm)","Meters(m)","Kilometers(km)","Inches(in)","Feet(ft)","Yard(yd)"," Miles(mi)"};
-    static String [] MAIN_MENU = {"[1] Length Converter", "[2] Weight Converter", "[3] Temperature Converter", "[4] Currency Converter", "[5] Exit"};
+    static String [] MAIN_MENU = {"[1] Length Converter", "[2] Weight Converter", "[3] Temperature Converter", "[4] Exit"};
     static Scanner scanner = new Scanner(System.in);
     static DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
@@ -88,7 +88,7 @@ public class OmniConvertCLI {
         System.out.println();
         System.out.println("[1] "+TEMPERATURE_UNITS[0]);
         System.out.println("[2] "+TEMPERATURE_UNITS[1]);
-        System.out.println("[3] "+TEMPERATURE_UNITS[3]);
+        System.out.println("[3] "+TEMPERATURE_UNITS[2]);
         System.out.println();
         System.out.println("===========================================================");
     }
@@ -97,7 +97,7 @@ public class OmniConvertCLI {
         System.out.println("===========================================================");
         System.out.print("Enter Your Choice(1-4) : ");
         int choice = Integer.parseInt(scanner.nextLine());
-        while (choice>5 || choice<1){
+        while (choice>4 || choice<1){
             System.out.println("Invalid Input.");
             System.out.print("Enter Your Choice : ");
             choice = Integer.parseInt(scanner.nextLine());
@@ -164,17 +164,14 @@ public class OmniConvertCLI {
         switch (choice){
             case 1:
                 lengthConverter();
-                return askNextStep();
+                return true;
             case 2:
                 weightConverter();
-                return askNextStep();
+                return true;
             case 3:
                 temperatureConverter();
-                return askNextStep();
+                return true;
             case 4:
-                currencyConverter();
-                return askNextStep();
-            case 5:
                 goodBye();
                 return false;
             default:
@@ -184,35 +181,22 @@ public class OmniConvertCLI {
 
     }
 
-    public static boolean askNextStep(){System.out.println("_____________________________________________________");
+    public static int askNextStep(String unitType){
+        System.out.println("_____________________________________________________");
         System.out.println("What's Next?");
-        System.out.println("[1] New length Conversion");
+        System.out.println("[1] New "+unitType+" Conversion");
         System.out.println("[2] Back To Main Menu");
         System.out.println("[0] Exit");
 
-        while (true) {
+        System.out.print("Enter Your Choice : ");
+        int choice = Integer.parseInt(scanner.nextLine());
+
+        while (choice<0 || choice>2){
+            System.out.println("Invalid Input.");
             System.out.print("Enter Your Choice : ");
-            int choice = Integer.parseInt(scanner.nextLine());
-
-            while (choice<0 || choice>2 ){
-                System.out.print("Invalid Input");
-                System.out.print("Enter Your Choice : ");
-                choice = Integer.parseInt(scanner.nextLine());
-            }
-
-            if (choice == 1) {
-                lengthConverter();
-            }
-            else if (choice == 2){
-                return true;
-            }
-            else if (choice == 0) {
-                return false;
-            }
-            else {
-                System.out.println("Invalid Input");
-            }
+            choice = Integer.parseInt(scanner.nextLine());
         }
+        return choice;
     }
 
     private static double lengthConvertToMeter(int fromUnit, double amount){
@@ -232,7 +216,7 @@ public class OmniConvertCLI {
             case 7:
                 return amount*0.9411;
             case 8:
-                return amount/1609.344;
+                return amount*1609.344;
             default:
                 return 0;
         }
@@ -262,24 +246,34 @@ public class OmniConvertCLI {
     }
 
     private static void lengthConverter(){
-        clearScrean();
-        drawLengthConverterHader();
-        drawLengthConverterMenu();
-        int convertFrom = getUnit(1, ": Convert From Which Unit?",1,8);
-        int convertTo = getUnit(2, ": Convert To Which Unit?",1,8);
-        double amount = getAmount();
+        int userChoice;
+        do {
+            clearScrean();
+            drawLengthConverterHader();
+            drawLengthConverterMenu();
+            int convertFrom = getUnit(1, ": Convert From Which Unit?", 1, 8);
+            int convertTo = getUnit(2, ": Convert To Which Unit?", 1, 8);
+            double amount = getAmount();
 
-        double lengthInMeter = lengthConvertToMeter(convertFrom,amount);
-        double result = lengthConvertFromMeter(convertTo,lengthInMeter);
+            double lengthInMeter = lengthConvertToMeter(convertFrom, amount);
+            double result = lengthConvertFromMeter(convertTo, lengthInMeter);
 
-        String formatResult = decimalFormat.format(result);
+            String formatResult = decimalFormat.format(result);
 
-        clearScrean();
-        drawLengthConverterHader();
-        System.out.println();
-        System.out.println("Calculating.....");
-        System.out.println("[ "+LENGTH_UNITS[convertFrom-1]+" >> "+LENGTH_UNITS[convertTo-1]+" ] ");
-        System.out.println("Result : "+formatResult+" "+LENGTH_UNITS[convertTo-1]);
+            clearScrean();
+            drawLengthConverterHader();
+            System.out.println();
+            System.out.println("Calculating.....");
+            System.out.println("[ " + LENGTH_UNITS[convertFrom - 1] + " >> " + LENGTH_UNITS[convertTo - 1] + " ] ");
+            System.out.println("Result : " + formatResult + " " + LENGTH_UNITS[convertTo - 1]);
+
+             userChoice = askNextStep("Length");
+
+            if (userChoice == 0) {
+                goodBye();
+                System.exit(0);
+            }
+        }while (userChoice ==1);
 
     }
 
@@ -330,15 +324,18 @@ public class OmniConvertCLI {
     }
 
     private static void weightConverter(){
+
+        int userChoice;
+        do {
             clearScrean();
             drawWightConverterHader();
             drawWeightConverterMenu();
-            int convertFrom = getUnit(1,": Convert From Which Unit?",1,8);
-            int convertTo = getUnit(2,": Convert To Which Unit?",1,8);
+            int convertFrom = getUnit(1, ": Convert From Which Unit?", 1, 8);
+            int convertTo = getUnit(2, ": Convert To Which Unit?", 1, 8);
             double amount = getAmount();
 
-            double weightInKilogram = weightToKilogram(convertFrom,amount);
-            double result = weightFromKilogram(convertTo,weightInKilogram);
+            double weightInKilogram = weightToKilogram(convertFrom, amount);
+            double result = weightFromKilogram(convertTo, weightInKilogram);
 
             String formatResult = decimalFormat.format(result);
 
@@ -346,9 +343,16 @@ public class OmniConvertCLI {
             drawWightConverterHader();
             System.out.println();
             System.out.println("Calculating.....");
-            System.out.println("[ "+WEIGHT_UNITS[convertFrom-1]+" >> "+WEIGHT_UNITS[convertTo-1]+" ] ");
-            System.out.println("Result : "+formatResult+" "+WEIGHT_UNITS[convertTo-1]);
+            System.out.println("[ " + WEIGHT_UNITS[convertFrom - 1] + " >> " + WEIGHT_UNITS[convertTo - 1] + " ] ");
+            System.out.println("Result : " + formatResult + " " + WEIGHT_UNITS[convertTo - 1]);
 
+            userChoice = askNextStep("Wight");
+
+            if(userChoice == 0){
+                goodBye();
+                System.exit(0);
+            }
+        }while (userChoice == 1);
     }
 
     private static double temperatureConvertToCelsius(int convertFrom, double amount){
@@ -356,7 +360,7 @@ public class OmniConvertCLI {
             case 1:
                 return amount;
             case 2:
-                return (amount - 32) * 5 / 9;
+                return (amount - 32) * 5.0 / 9;
             case 3:
                 return (amount - 273.15);
             default:
@@ -369,7 +373,7 @@ public class OmniConvertCLI {
             case 1:
                 return temperatureInCelsius;
             case 2:
-                return (temperatureInCelsius * 9 / 5) + 32;
+                return (temperatureInCelsius * 9.0 / 5) + 32;
             case 3:
                 return temperatureInCelsius + 273.15;
             default:
@@ -378,29 +382,36 @@ public class OmniConvertCLI {
     }
 
     private static void temperatureConverter(){
-        clearScrean();
-        drawTemperatureConverterHader();
-        drawTemperatureConverterMenu();
-        int convertFrom = getUnit(1,": Convert From Which Unit?",1,3);
-        int convertTo = getUnit(2,": Convert To Which Unit?",1,3);
-        double amount = getTemperature(convertFrom);
 
-        double temperatureInCelsius = temperatureConvertToCelsius(convertFrom,amount);
-        double temperature = temperatureConvertFromCelsius(convertTo, temperatureInCelsius);
+        int userChoice;
+        do {
+            clearScrean();
+            drawTemperatureConverterHader();
+            drawTemperatureConverterMenu();
+            int convertFrom = getUnit(1, ": Convert From Which Unit?", 1, 3);
+            int convertTo = getUnit(2, ": Convert To Which Unit?", 1, 3);
+            double amount = getTemperature(convertFrom);
 
-        String formatTemperature = decimalFormat.format(temperature);
+            double temperatureInCelsius = temperatureConvertToCelsius(convertFrom, amount);
+            double temperature = temperatureConvertFromCelsius(convertTo, temperatureInCelsius);
 
-        clearScrean();
-        drawTemperatureConverterHader();
-        System.out.println("Calculating.....");
-        System.out.println("[ "+TEMPERATURE_UNITS[convertFrom-1]+" >> "+TEMPERATURE_UNITS[convertTo-1]+" ] ");
-        System.out.println("Result : "+formatTemperature+" "+TEMPERATURE_UNITS[convertTo-1]);
+            String formatTemperature = decimalFormat.format(temperature);
 
+            clearScrean();
+            drawTemperatureConverterHader();
+            System.out.println("Calculating.....");
+            System.out.println("[ " + TEMPERATURE_UNITS[convertFrom - 1] + " >> " + TEMPERATURE_UNITS[convertTo - 1] + " ] ");
+            System.out.println("Result : " + formatTemperature + " " + TEMPERATURE_UNITS[convertTo - 1]);
+
+            userChoice = askNextStep("Temperature");
+
+            if (userChoice == 0){
+                goodBye();
+                System.exit(0);
+            }
+        }while (userChoice == 1);
     }
 
-    private static void currencyConverter(){
-
-    }
 
     private static void goodBye(){
         clearScrean();
