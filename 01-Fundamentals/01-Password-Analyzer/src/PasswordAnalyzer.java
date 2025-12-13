@@ -72,9 +72,10 @@ public class PasswordAnalyzer {
         System.out.print("Enter your choice (1-4): ");
         int choice = Integer.parseInt(scanner.nextLine());
 
-        if(choice<1 || choice>4){
+        while(choice<1 || choice>4){
             System.out.println("Invalid Input");
-            getChoice();
+            System.out.print("Enter your choice (1-4): ");
+            choice = Integer.parseInt(scanner.nextLine());
         }
         return choice;
     }
