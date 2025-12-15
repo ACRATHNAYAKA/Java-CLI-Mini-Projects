@@ -10,7 +10,7 @@ public class FinTrackCLI {
     static Scanner scanner = new Scanner(System.in);
 
     static String [] INCOME_TYPE = {"Salary / Wages","Freelancing / Side Hustle","Business Profit","Allowance / Pocket Money","Gifts / Awards","Investments","Selling Items","Bonus","Rental Income","Others"};
-
+    static String [] EXPENSES_TYPE = {"Food & Dining","Transport / Fuel","Housing / Rent","Education / Books","Shopping / Clothing","Bills & Utilities","Health / Medical","Entertainment","Personal Care","Others"};
 
     private static String [] MIAN_MENU = {"Add Income", "Add Expenses","Get Report","Exit"};
     public static void main(String[] args) {
@@ -22,14 +22,22 @@ public class FinTrackCLI {
             dashBord("asdfasf");
             drawMainMenu();
 
-            addIncome();
+            addExpense();
             appRunning = false;
         }
     }
 
-
+    private static void  addExpense(){
+        clearScrean();
+        drawHeader("Add Expenses");
+        drawExpensesMenu();
+        int userChoiceCategory = getUserChoice();
+        double amount = getAmount();
+        LocalDate date = LocalDate.now();
+    }
 
     private static void goodBye(){
+        clearScrean();
         System.out.println("            Thank You For Using FinTrack CLI             ");
         System.out.println("              -Developed By AC Rathnayaka-                  ");
     }
@@ -37,7 +45,7 @@ public class FinTrackCLI {
     private static void addIncome(){
         clearScrean();
         drawHeader("Add Income");
-        drawIncomeTypeMenu();
+        drawIncomeMenu();
         int userChoiceCategory =  getUserChoice();
         double amount = getAmount();
         LocalDate date = LocalDate.now();
@@ -58,7 +66,7 @@ public class FinTrackCLI {
     }
 
     private static int getUserChoice(){
-        System.out.print("Step 01: Select Income Categories(1-10) : ");
+        System.out.print("Step 01: Select Categories(1-10) : ");
         int userChoice = Integer.parseInt(scanner.nextLine());
 
         while (userChoice<1 || userChoice >10){
@@ -70,13 +78,23 @@ public class FinTrackCLI {
         return userChoice;
     }
 
-    private static void drawIncomeTypeMenu(){
+    private static void drawIncomeMenu(){
         System.out.println("___________________ Income Categories ____________________");
         System.out.println("[1] "+INCOME_TYPE[0]+"                     "+"[6] "+INCOME_TYPE[5]);
         System.out.println("[2] "+INCOME_TYPE[1]+"          "+"[7] "+INCOME_TYPE[6]);
         System.out.println("[3] "+INCOME_TYPE[2]+"                    "+"[8] "+INCOME_TYPE[7]);
         System.out.println("[4] "+INCOME_TYPE[3]+"           "+"[9] "+INCOME_TYPE[8]);
         System.out.println("[5] "+INCOME_TYPE[4]+"                     "+"[10] "+INCOME_TYPE[9]);
+        System.out.println("__________________________________________________________");
+    }
+
+    private static void drawExpensesMenu(){
+        System.out.println("___________________ Expense Categories ____________________");
+        System.out.println("[1] "+EXPENSES_TYPE[0]+"            "+"[6] "+EXPENSES_TYPE[5]);
+        System.out.println("[2] "+EXPENSES_TYPE[1]+"         "+"[7] "+EXPENSES_TYPE[6]);
+        System.out.println("[3] "+EXPENSES_TYPE[2]+"           "+"[8] "+EXPENSES_TYPE[7]);
+        System.out.println("[4] "+EXPENSES_TYPE[3]+"        "+"[9] "+EXPENSES_TYPE[8]);
+        System.out.println("[5] "+EXPENSES_TYPE[4]+"      "+"[10] "+EXPENSES_TYPE[9]);
         System.out.println("__________________________________________________________");
     }
 
