@@ -27,12 +27,20 @@ public class FinTrackCLI {
         }
     }
 
+
+
+    private static void goodBye(){
+        System.out.println("            Thank You For Using FinTrack CLI             ");
+        System.out.println("              -Developed By AC Rathnayaka-                  ");
+    }
+
     private static void addIncome(){
         clearScrean();
         drawHeader("Add Income");
         drawIncomeTypeMenu();
         int userChoiceCategory =  getUserChoice();
         double amount = getAmount();
+        LocalDate date = LocalDate.now();
 
     }
 
@@ -113,5 +121,14 @@ public class FinTrackCLI {
         System.out.println("==========================================================");
         System.out.println("                "+headerName+"                            ");
         System.out.println("==========================================================");
+    }
+
+
+    private static void writeIncome(){
+
+    }
+
+    private static void readIncome(){
+
     }
 }
