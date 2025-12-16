@@ -1,5 +1,6 @@
 import javax.imageio.IIOException;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -9,14 +10,13 @@ import java.util.Scanner;
 public class FinTrackCLI {
 
 
-    private static final String INCOME_FILE_PATH = "01-Fundamentals\\03-Personal-Finance-Tracker\\data\\income.txt";
-    private static final String EXPENCE_FILE_PATH = "01-Fundamentals\\03-Personal-Finance-Tracker\\data\\expenses.txt";
+    private static final String FILE_PATH = "01-Fundamentals\\03-Personal-Finance-Tracker\\data\\records.txt";
 
     private static double balance;
     private static double totalIncome;
     private static double totalExpenses;
 
-    private static int id;
+    private static int id = 1;
     private static String date;
     private static String category;
     private static double amount;
@@ -28,13 +28,17 @@ public class FinTrackCLI {
     private static String [] EXPENSES_TYPE = {"Food & Dining","Transport / Fuel","Housing / Rent","Education / Books","Shopping / Clothing","Bills & Utilities","Health / Medical","Entertainment","Personal Care","Others"};
     private static String [] MIAN_MENU = {"Add Income", "Add Expenses","Get Report","Exit"};
 
-    private static String [] CATEGORY = {};
-    private static String [] DATE = {};
-    private static int [] IDS = {};
-    private static String[] TYPE = {};
+    private static String [] CATEGORY = new String[100];
+    private static String [] DATE = new String[100];
+    private static int [] IDS = new int[100];
+    private static String[] TYPE = new String[100];
+    private static double [] AMOUNT = new double[100];
+
+    private static int recordCounter = 0;
 
 
     public static void main(String[] args) throws IOException {
+        loadData();
         boolean appRunning = true;
 
         while (appRunning){
@@ -51,10 +55,12 @@ public class FinTrackCLI {
         clearScrean();
         drawHeader("Add Expenses");
         drawExpensesMenu();
+        String type = "Expense";
         int userChoiceCategory = getUserChoice();
         double amount = getAmount();
 
-        saveRecord(userChoiceCategory,amount,"Expense",EXPENCE_FILE_PATH);
+
+        saveRecord(EXPENSES_TYPE[userChoiceCategory-1],amount, type);
     }
 
     private static void goodBye(){
@@ -67,10 +73,11 @@ public class FinTrackCLI {
         clearScrean();
         drawHeader("Add Income");
         drawIncomeMenu();
+        String type = "Income";
         int userChoiceCategory =  getUserChoice();
         double amount = getAmount();
 
-        saveRecord(userChoiceCategory ,amount,"Income",INCOME_FILE_PATH);
+        saveRecord(INCOME_TYPE[userChoiceCategory-1],amount,type);
 
     }
 
@@ -181,53 +188,59 @@ public class FinTrackCLI {
     }
 
 
-    private static void saveRecord(int categoryID, double amount, String type, String filePath ) throws IOException {
-        File file = new File(filePath);
+    private static void saveRecord(String category, double amount, String type) throws IOException {
+        File file = new File(FILE_PATH);
         if (!file.exists()){
             file.createNewFile();
         }
         FileWriter fileWriter = new FileWriter(file, true);
         LocalDate date = LocalDate.now();
-        String record = id+","+ date + "," + categoryID + "," +type+","+ amount + "\n";
+        String record = id+","+ date + "," + category + "," +type+","+ amount + "\n";
         fileWriter.write(record);
         fileWriter.close();
+        id++;
 
         System.out.println("Record Saved Successfully");
 
     }
 
-    private static void readIncomeRecodes(String incomeFilePath, String expenceFilePath){
-        File incomesFile = new File(incomeFilePath);
+    private static void loadData() throws FileNotFoundException {
+        File file = new File(FILE_PATH);
 
 
-        if (incomesFile.exists()){
-            Scanner incomeScanner = new Scanner(incomeFilePath);
+        if (file.exists()){
+            Scanner fileScanner = new Scanner(file);
 
-            while (incomeScanner.hasNextLine()){
-                String record = incomeScanner.nextLine();
+            while (fileScanner.hasNextLine()){
+                String record = fileScanner.nextLine();
+
+                String [] parts = record.split(",");
+
+                if (parts.length == 5 && recordCounter<100){
+                    IDS[recordCounter] = Integer.parseInt(parts[0]);
+                    DATE[recordCounter] = parts[1];
+                    CATEGORY[recordCounter] = parts[2];
+                    TYPE[recordCounter] = parts[3];
+                    AMOUNT[recordCounter] = Double.parseDouble(parts[4]);
+
+                    if (parts[3].equals("Income")) {
+                        totalIncome += amount;
+                    } else {
+                        totalExpenses += amount;
+                    }
+
+                    recordCounter++;
+                }
             }
+            fileScanner.close();
+
+            balance = totalIncome -totalExpenses;
         }
 
         else {
-            System.out.println("Income File Missing");
+            System.out.println("File Missing");
         }
 
 
-    }
-
-    private static void readExpensesRecords (String expensesFilePath){
-        File expensesFile = new File(expensesFilePath);
-
-        if (expensesFile.exists()){
-            Scanner expensesScanner = new Scanner(expensesFilePath);
-
-            while (expensesScanner.hasNextLine()){
-                String record = expensesScanner.nextLine();
-            }
-        }
-
-        else {
-            System.out.println("Expenses File Missing");
-        }
     }
 }
