@@ -7,8 +7,10 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class FinTrackCLI {
-    private static String INCOME_FILE_PATH = "01-Fundamentals\\03-Personal-Finance-Tracker\\data\\income.txt";
-    private static String EXPENCE_FILE_PATH = "01-Fundamentals\\03-Personal-Finance-Tracker\\data\\expenses.txt";
+
+
+    private static final String INCOME_FILE_PATH = "01-Fundamentals\\03-Personal-Finance-Tracker\\data\\income.txt";
+    private static final String EXPENCE_FILE_PATH = "01-Fundamentals\\03-Personal-Finance-Tracker\\data\\expenses.txt";
 
     private static double balance;
     private static double totalIncome;
@@ -20,11 +22,17 @@ public class FinTrackCLI {
     private static double amount;
     private static String type;
 
-    private static Scanner scanner = new Scanner(System.in);
+    private static  Scanner scanner = new Scanner(System.in);
 
     private static String [] INCOME_TYPE = {"Salary / Wages","Freelancing / Side Hustle","Business Profit","Allowance / Pocket Money","Gifts / Awards","Investments","Selling Items","Bonus","Rental Income","Others"};
     private static String [] EXPENSES_TYPE = {"Food & Dining","Transport / Fuel","Housing / Rent","Education / Books","Shopping / Clothing","Bills & Utilities","Health / Medical","Entertainment","Personal Care","Others"};
     private static String [] MIAN_MENU = {"Add Income", "Add Expenses","Get Report","Exit"};
+
+    private static String [] CATEGORY = {};
+    private static String [] DATE = {};
+    private static int [] IDS = {};
+    private static String[] TYPE = {};
+
 
     public static void main(String[] args) throws IOException {
         boolean appRunning = true;
@@ -46,7 +54,7 @@ public class FinTrackCLI {
         int userChoiceCategory = getUserChoice();
         double amount = getAmount();
 
-        saveRecord(EXPENSES_TYPE[userChoiceCategory-1],amount,EXPENCE_FILE_PATH);
+        saveRecord(userChoiceCategory,amount,"Expense",EXPENCE_FILE_PATH);
     }
 
     private static void goodBye(){
@@ -62,7 +70,7 @@ public class FinTrackCLI {
         int userChoiceCategory =  getUserChoice();
         double amount = getAmount();
 
-        saveRecord(INCOME_TYPE[userChoiceCategory-1],amount,INCOME_FILE_PATH);
+        saveRecord(userChoiceCategory ,amount,"Income",INCOME_FILE_PATH);
 
     }
 
@@ -173,14 +181,14 @@ public class FinTrackCLI {
     }
 
 
-    private static void saveRecord(String category, double amount, String filePath ) throws IOException {
+    private static void saveRecord(int categoryID, double amount, String type, String filePath ) throws IOException {
         File file = new File(filePath);
         if (!file.exists()){
             file.createNewFile();
         }
         FileWriter fileWriter = new FileWriter(file, true);
         LocalDate date = LocalDate.now();
-        String record = id+","+ date + "," + category + "," + amount + "\n";
+        String record = id+","+ date + "," + categoryID + "," +type+","+ amount + "\n";
         fileWriter.write(record);
         fileWriter.close();
 
@@ -188,7 +196,38 @@ public class FinTrackCLI {
 
     }
 
-    private static void readIncome(){
+    private static void readIncomeRecodes(String incomeFilePath, String expenceFilePath){
+        File incomesFile = new File(incomeFilePath);
 
+
+        if (incomesFile.exists()){
+            Scanner incomeScanner = new Scanner(incomeFilePath);
+
+            while (incomeScanner.hasNextLine()){
+                String record = incomeScanner.nextLine();
+            }
+        }
+
+        else {
+            System.out.println("Income File Missing");
+        }
+
+
+    }
+
+    private static void readExpensesRecords (String expensesFilePath){
+        File expensesFile = new File(expensesFilePath);
+
+        if (expensesFile.exists()){
+            Scanner expensesScanner = new Scanner(expensesFilePath);
+
+            while (expensesScanner.hasNextLine()){
+                String record = expensesScanner.nextLine();
+            }
+        }
+
+        else {
+            System.out.println("Expenses File Missing");
+        }
     }
 }
