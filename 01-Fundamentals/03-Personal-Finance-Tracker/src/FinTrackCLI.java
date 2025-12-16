@@ -1,39 +1,52 @@
+import javax.imageio.IIOException;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.Scanner;
 
 public class FinTrackCLI {
+    private static String INCOME_FILE_PATH = "01-Fundamentals\\03-Personal-Finance-Tracker\\data\\income.txt";
+    private static String EXPENCE_FILE_PATH = "01-Fundamentals\\03-Personal-Finance-Tracker\\data\\expenses.txt";
+
     private static double balance;
     private static double totalIncome;
     private static double totalExpenses;
 
-    static Scanner scanner = new Scanner(System.in);
+    private static int id;
+    private static String date;
+    private static String category;
+    private static double amount;
+    private static String type;
 
-    static String [] INCOME_TYPE = {"Salary / Wages","Freelancing / Side Hustle","Business Profit","Allowance / Pocket Money","Gifts / Awards","Investments","Selling Items","Bonus","Rental Income","Others"};
-    static String [] EXPENSES_TYPE = {"Food & Dining","Transport / Fuel","Housing / Rent","Education / Books","Shopping / Clothing","Bills & Utilities","Health / Medical","Entertainment","Personal Care","Others"};
+    private static Scanner scanner = new Scanner(System.in);
 
+    private static String [] INCOME_TYPE = {"Salary / Wages","Freelancing / Side Hustle","Business Profit","Allowance / Pocket Money","Gifts / Awards","Investments","Selling Items","Bonus","Rental Income","Others"};
+    private static String [] EXPENSES_TYPE = {"Food & Dining","Transport / Fuel","Housing / Rent","Education / Books","Shopping / Clothing","Bills & Utilities","Health / Medical","Entertainment","Personal Care","Others"};
     private static String [] MIAN_MENU = {"Add Income", "Add Expenses","Get Report","Exit"};
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws IOException {
         boolean appRunning = true;
 
         while (appRunning){
             clearScrean();
             drawHeader("FinTrackCLI");
-            dashBord("asdfasf");
+            summer("asdfasf");
             drawMainMenu();
-
             addExpense();
             appRunning = false;
         }
     }
 
-    private static void  addExpense(){
+    private static void  addExpense() throws IOException {
         clearScrean();
         drawHeader("Add Expenses");
         drawExpensesMenu();
         int userChoiceCategory = getUserChoice();
         double amount = getAmount();
-        LocalDate date = LocalDate.now();
+
+        saveRecord(EXPENSES_TYPE[userChoiceCategory-1],amount,EXPENCE_FILE_PATH);
     }
 
     private static void goodBye(){
@@ -42,13 +55,14 @@ public class FinTrackCLI {
         System.out.println("              -Developed By AC Rathnayaka-                  ");
     }
 
-    private static void addIncome(){
+    private static void addIncome() throws IOException {
         clearScrean();
         drawHeader("Add Income");
         drawIncomeMenu();
         int userChoiceCategory =  getUserChoice();
         double amount = getAmount();
-        LocalDate date = LocalDate.now();
+
+        saveRecord(INCOME_TYPE[userChoiceCategory-1],amount,INCOME_FILE_PATH);
 
     }
 
@@ -98,6 +112,26 @@ public class FinTrackCLI {
         System.out.println("__________________________________________________________");
     }
 
+    private static void getReport(){
+        clearScrean();
+        drawHeader("FINANCIAL STATEMENT - FULL REPORT");
+        summer("a");
+        drawTableHader();
+        addItemToTable();
+
+
+    }
+
+    private static void drawTableHader(){
+        System.out.println("+----------+------------------+---------------------------------+------------+-----------------+");
+        System.out.println("|    ID    |       DATE       |      CATEGORY                   |   TYPE     |      AMOUNT     |");
+        System.out.println("+----------+------------------+---------------------------------+------------+-----------------+");
+    }
+
+    private static void addItemToTable(){
+        System.out.println("|    "+id+"    | "+date+" | "+category+" | "+type+" |  "+amount+" |");
+    }
+
     private static void drawMainMenu(){
         int i = 1;
         for (String item: MIAN_MENU){
@@ -106,7 +140,7 @@ public class FinTrackCLI {
         }
     }
 
-    private static void dashBord(String userName) {
+    private static void summer(String userName) {
         LocalDate date = LocalDate.now();
         System.out.println("user : " + userName + "         " + "Date : " + date);
         System.out.println("__________________________________________________________");
@@ -126,9 +160,6 @@ public class FinTrackCLI {
 
     }
 
-    private static void finAlerts(){
-
-    }
 
     private static void clearScrean(){
         System.out.print("\033[H\033[2J");
@@ -142,7 +173,18 @@ public class FinTrackCLI {
     }
 
 
-    private static void writeIncome(){
+    private static void saveRecord(String category, double amount, String filePath ) throws IOException {
+        File file = new File(filePath);
+        if (!file.exists()){
+            file.createNewFile();
+        }
+        FileWriter fileWriter = new FileWriter(file, true);
+        LocalDate date = LocalDate.now();
+        String record = id+","+ date + "," + category + "," + amount + "\n";
+        fileWriter.write(record);
+        fileWriter.close();
+
+        System.out.println("Record Saved Successfully");
 
     }
 
