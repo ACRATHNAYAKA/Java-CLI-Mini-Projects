@@ -35,10 +35,11 @@ public class FinTrackCLI {
 
 
     public static void main(String[] args) throws IOException {
-        loadData();
+
         boolean appRunning = true;
 
         while (appRunning){
+            loadData();
             clearScrean();
             drawHeader("Fin Track CLI");
             summer("example");
@@ -178,8 +179,8 @@ public class FinTrackCLI {
             int recordID = IDS[i];
             String recordDate = DATE[i];
             String recordCategory = CATEGORY[i];
-            String recordType = TYPE[1];
-            double recordAmount = AMOUNT[1];
+            String recordType = TYPE[i];
+            double recordAmount = AMOUNT[i];
             System.out.println("|     " + recordID + "    |    " + recordDate + "    |    " + recordCategory + "           |  " + recordType + "   |  " + recordAmount + " ");
             System.out.println("+----------+------------------+----------------------------+------------+-----------------+");
         }
@@ -241,6 +242,10 @@ public class FinTrackCLI {
     }
 
     private static void loadData() throws FileNotFoundException {
+        totalIncome = 0;
+        totalExpenses = 0;
+        balance = 0;
+        recordCounter = 0;
         File file = new File(FILE_PATH);
 
 
@@ -275,6 +280,10 @@ public class FinTrackCLI {
 
         else {
             System.out.println("File Missing");
+        }
+
+        if(recordCounter>0){
+            id = IDS[recordCounter-1]+1;
         }
 
 
