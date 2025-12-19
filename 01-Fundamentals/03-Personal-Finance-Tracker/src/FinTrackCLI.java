@@ -1,10 +1,10 @@
-import javax.imageio.IIOException;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Date;
+
 import java.util.Scanner;
 
 public class FinTrackCLI {
@@ -17,22 +17,19 @@ public class FinTrackCLI {
     private static double totalExpenses;
 
     private static int id = 1;
-    private static String date;
-    private static String category;
-    private static double amount;
-    private static String type;
 
-    private static  Scanner scanner = new Scanner(System.in);
 
-    private static String [] INCOME_TYPE = {"Salary / Wages","Freelancing / Side Hustle","Business Profit","Allowance / Pocket Money","Gifts / Awards","Investments","Selling Items","Bonus","Rental Income","Others"};
-    private static String [] EXPENSES_TYPE = {"Food & Dining","Transport / Fuel","Housing / Rent","Education / Books","Shopping / Clothing","Bills & Utilities","Health / Medical","Entertainment","Personal Care","Others"};
-    private static String [] MIAN_MENU = {"Add Income", "Add Expenses","Get Report","Exit"};
+    private static final  Scanner scanner = new Scanner(System.in);
 
-    private static String [] CATEGORY = new String[100];
-    private static String [] DATE = new String[100];
-    private static int [] IDS = new int[100];
-    private static String[] TYPE = new String[100];
-    private static double [] AMOUNT = new double[100];
+    private static final String [] INCOME_TYPE = {"Salary / Wages","Freelancing / Side Hustle","Business Profit","Allowance / Pocket Money","Gifts / Awards","Investments","Selling Items","Bonus","Rental Income","Others"};
+    private static final String [] EXPENSES_TYPE = {"Food & Dining","Transport / Fuel","Housing / Rent","Education / Books","Shopping / Clothing","Bills & Utilities","Health / Medical","Entertainment","Personal Care","Others"};
+    private static final String [] MIAN_MENU = {"Add Income", "Add Expenses","Get Report","Exit"};
+
+    private static final String [] CATEGORY = new String[100];
+    private static final String [] DATE = new String[100];
+    private static final int [] IDS = new int[100];
+    private static final String[] TYPE = new String[100];
+    private static final double [] AMOUNT = new double[100];
 
     private static int recordCounter = 0;
 
@@ -43,11 +40,44 @@ public class FinTrackCLI {
 
         while (appRunning){
             clearScrean();
-            drawHeader("FinTrackCLI");
-            summer("asdfasf");
+            drawHeader("Fin Track CLI");
+            summer("example");
             drawMainMenu();
-            addExpense();
-            appRunning = false;
+            appRunning = performAction();
+
+
+
+        }
+    }
+
+    private static int getUserChoiceMainMenu(){
+        System.out.print("Enter Your Choice(1-4) :");
+        int choice = Integer.parseInt(scanner.nextLine());
+        while (choice<1 || choice>4){
+            System.out.println("Invalid Input.");
+            System.out.print("Enter Your Choice(1-4) :");
+            choice = Integer.parseInt(scanner.nextLine());
+        }
+        return choice;
+    }
+
+    private static boolean performAction() throws IOException {
+        int choice = getUserChoiceMainMenu();
+        switch (choice){
+            case 1:
+                addIncome();
+                return true;
+            case 2:
+                addExpense();
+                return true;
+            case 3:
+                getReport();
+                return true;
+            case 4:
+                goodBye();
+                return false;
+            default:
+                return true;
         }
     }
 
@@ -138,13 +168,21 @@ public class FinTrackCLI {
     }
 
     private static void drawTableHader(){
-        System.out.println("+----------+------------------+---------------------------------+------------+-----------------+");
-        System.out.println("|    ID    |       DATE       |      CATEGORY                   |   TYPE     |      AMOUNT     |");
-        System.out.println("+----------+------------------+---------------------------------+------------+-----------------+");
+        System.out.println("+----------+------------------+----------------------------+------------+-----------------+");
+        System.out.println("|    ID    |       DATE       |      CATEGORY              |   TYPE     |      AMOUNT     |");
+        System.out.println("+----------+------------------+----------------------------+------------+-----------------+");
     }
 
     private static void addItemToTable(){
-        System.out.println("|    "+id+"    | "+date+" | "+category+" | "+type+" |  "+amount+" |");
+        for (int i = 0; recordCounter>i; i++) {
+            int recordID = IDS[i];
+            String recordDate = DATE[i];
+            String recordCategory = CATEGORY[i];
+            String recordType = TYPE[1];
+            double recordAmount = AMOUNT[1];
+            System.out.println("|     " + recordID + "    |    " + recordDate + "    |    " + recordCategory + "           |  " + recordType + "   |  " + recordAmount + " ");
+            System.out.println("+----------+------------------+----------------------------+------------+-----------------+");
+        }
     }
 
     private static void drawMainMenu(){
@@ -159,7 +197,7 @@ public class FinTrackCLI {
         LocalDate date = LocalDate.now();
         System.out.println("user : " + userName + "         " + "Date : " + date);
         System.out.println("__________________________________________________________");
-        String balanceStatus = "";
+        String balanceStatus ;
         double balanceScore = balance / totalIncome * 100;
         if (balanceScore >= 75)
             balanceStatus = "Healthy";
@@ -190,9 +228,7 @@ public class FinTrackCLI {
 
     private static void saveRecord(String category, double amount, String type) throws IOException {
         File file = new File(FILE_PATH);
-        if (!file.exists()){
-            file.createNewFile();
-        }
+
         FileWriter fileWriter = new FileWriter(file, true);
         LocalDate date = LocalDate.now();
         String record = id+","+ date + "," + category + "," +type+","+ amount + "\n";
@@ -224,9 +260,9 @@ public class FinTrackCLI {
                     AMOUNT[recordCounter] = Double.parseDouble(parts[4]);
 
                     if (parts[3].equals("Income")) {
-                        totalIncome += amount;
+                        totalIncome += Double.parseDouble(parts[4]);
                     } else {
-                        totalExpenses += amount;
+                        totalExpenses += Double.parseDouble(parts[4]);
                     }
 
                     recordCounter++;
@@ -243,4 +279,6 @@ public class FinTrackCLI {
 
 
     }
+
+
 }
