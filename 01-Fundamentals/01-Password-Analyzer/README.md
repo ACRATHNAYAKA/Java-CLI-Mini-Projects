@@ -80,7 +80,7 @@ $$T = \frac{C}{\text{Guesses per Second}}$$
 *Computer Science Student | Strategic Developer*
 
 [![GitHub](https://img.shields.io/badge/GitHub-Profile-black?style=flat&logo=github)](https://github.com/ACRATHNAYAKA)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=flat&logo=linkedin)](your-linkedin-link-here)
+[
 
 ---
 *Disclaimer: This tool is for educational purposes only. Always use a reputable password manager for your sensitive accounts.*
