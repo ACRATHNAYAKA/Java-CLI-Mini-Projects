@@ -50,11 +50,11 @@ $$T = \frac{C}{\text{Guesses per Second}}$$
 ### Installation & Execution
 1.  **Clone the Repository:**
     ```bash
-    git clone [https://github.com/ACRATHNAYAKA/java-mini-projects.git](https://github.com/ACRATHNAYAKA/java-mini-projects.git)
+    git clone https://github.com/ACRATHNAYAKA/Java-CLI-Mini-Projects.git
     ```
 2.  **Navigate to Project Directory:**
     ```bash
-    cd fundamentals/password-strength-analyzer
+    cd 01-Fundamentals/01-Password-Analyzer/src
     ```
 3.  **Compile:**
     ```bash
@@ -80,7 +80,7 @@ $$T = \frac{C}{\text{Guesses per Second}}$$
 *Computer Science Student | Strategic Developer*
 
 [![GitHub](https://img.shields.io/badge/GitHub-Profile-black?style=flat&logo=github)](https://github.com/ACRATHNAYAKA)
-[
+
 
 ---
 *Disclaimer: This tool is for educational purposes only. Always use a reputable password manager for your sensitive accounts.*
