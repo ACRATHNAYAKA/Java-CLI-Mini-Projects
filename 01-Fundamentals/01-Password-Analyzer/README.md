@@ -76,8 +76,8 @@ $$T = \frac{C}{\text{Guesses per Second}}$$
 ---
 
 ## 👨‍💻 Author
-**Avishka Chamara**
-*Computer Science Student | Strategic Developer*
+**AC Rathnayaka**
+*BICT Student | Strategic Developer*
 
 [![GitHub](https://img.shields.io/badge/GitHub-Profile-black?style=flat&logo=github)](https://github.com/ACRATHNAYAKA)
 
