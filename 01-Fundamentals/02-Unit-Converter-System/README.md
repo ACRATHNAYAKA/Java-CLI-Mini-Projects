@@ -1,7 +1,7 @@
 # OminiConvertCLI Unit Converter System ⚖️
 
 ![Java](https://img.shields.io/badge/Language-Java-orange?style=for-the-badge&logo=java)
-![Category](https://img.shields.io/badge/Category-Utilities-green?style=for-the-badge)
+![Platform](https://img.shields.io/badge/Platform-CLI-lightgrey?style=for-the-badge)
 ![Logic](https://img.shields.io/badge/Focus-Mathematical_Logic-blue?style=for-the-badge)
 
 A precision-focused Command-Line Interface (CLI) application developed in **Java** that provides seamless conversion between various physical units. This project demonstrates core programming concepts such as modular method structures, control flow optimization, and real-time user input validation.
