@@ -54,7 +54,7 @@ $$T = \frac{C}{\text{Guesses per Second}}$$
     ```
 2.  **Navigate to Project Directory:**
     ```bash
-    cd 01-Fundamentals/01-Password-Analyzer/src
+    cd Fundamentals/01-Password-Analyzer/src
     ```
 3.  **Compile:**
     ```bash

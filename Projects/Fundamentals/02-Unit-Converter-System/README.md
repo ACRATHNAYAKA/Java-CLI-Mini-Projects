@@ -51,7 +51,7 @@ Where:
 
 2.  **Navigate to Project Directory:**
     ```bash
-    cd 01-Fundamentals/02-Unit-Converter-System/src
+    cd Fundamentals/02-Unit-Converter-System/src
     ```
 
 3.  **Compile:**
